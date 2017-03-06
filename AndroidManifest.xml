@@ -49,7 +49,12 @@
 
         <service
             android:name=".WeatherService"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="cyanogenmod.permission.BIND_WEATHER_PROVIDER_SERVICE">
+            <intent-filter>
+                <action android:name="cyanogenmod.weatherservice.WeatherProviderService" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name=".WeatherContentProvider"
