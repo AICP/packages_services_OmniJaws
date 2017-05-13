@@ -48,6 +48,8 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
             "http://api.openweathermap.org/data/2.5/forecast/daily?" +
             "%s&mode=json&units=%s&lang=%s&cnt=" + FORECAST_DAYS + "&appid=%s";
 
+    private static String pinWheel;
+
     public OpenWeatherMapProvider(Context context) {
         super(context);
     }
@@ -135,7 +137,8 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
                     /* windDir */ windData.has("deg") ? windData.getInt("deg") : 0,
                     metric,
                     forecasts,
-                    System.currentTimeMillis());
+                    System.currentTimeMillis(),
+                    pinWheel);
 
             log(TAG, "Weather updated: " + w);
             return w;
@@ -198,7 +201,7 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
         }
         return (float) value;
     }
-    
+
     private static final HashMap<String, String> LANGUAGE_CODE_MAPPING = new HashMap<String, String>();
     static {
         LANGUAGE_CODE_MAPPING.put("bg-", "bg");

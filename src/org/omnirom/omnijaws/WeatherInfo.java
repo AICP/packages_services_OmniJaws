@@ -31,6 +31,7 @@ public class WeatherInfo {
     private String id;
     private String city;
     private String condition;
+    private String pinWheel;
     private int conditionCode;
     public float temperature;
     private float humidity;
@@ -43,7 +44,8 @@ public class WeatherInfo {
     public WeatherInfo(Context context, String id,
             String city, String condition, int conditionCode, float temp,
             float humidity, float wind, int windDir,
-            boolean metric, ArrayList<DayForecast> forecasts, long timestamp) {
+            boolean metric, ArrayList<DayForecast> forecasts, long timestamp,
+            String pinWheel) {
         this.mContext = context.getApplicationContext();
         this.id = id;
         this.city = city;
@@ -56,6 +58,7 @@ public class WeatherInfo {
         this.temperature = temp;
         this.forecasts = forecasts;
         this.metric = metric;
+        this.pinWheel = pinWheel;
     }
 
     public static class WeatherLocation {
@@ -65,7 +68,7 @@ public class WeatherInfo {
         public String countryId;
         public String country;
     }
-    
+
     public static class DayForecast {
         public final float low, high;
         public final int conditionCode;
@@ -98,6 +101,25 @@ public class WeatherInfo {
             return conditionCode;
         }
     }
+
+    public static final String[] WIND_DIRECTION = new String[]{
+            "N",
+            "NNE",
+            "NE",
+            "ENE",
+            "E",
+            "ESE",
+            "SE",
+            "SSE",
+            "S",
+            "SSW",
+            "SW",
+            "WSW",
+            "W",
+            "WNW",
+            "NW",
+            "NNW"
+    };
 
     public String getId() {
         return id;
@@ -165,6 +187,12 @@ public class WeatherInfo {
         return windDirection;
     }
 
+    public String getFormattedWindDirection() {
+      int value = (int) ((windDirection/22.5)+0.5);
+      pinWheel = WIND_DIRECTION[(value % 16)];
+      return pinWheel;
+    }
+
     public ArrayList<DayForecast> getForecasts() {
         return forecasts;
     }
@@ -197,7 +225,7 @@ public class WeatherInfo {
         builder.append(", wind ");
         builder.append(getFormattedWindSpeed());
         builder.append(" at ");
-        builder.append(getWindDirection());
+        builder.append(getFormattedWindDirection());
         if (forecasts.size() > 0) {
             builder.append(", forecasts:");
         }
@@ -228,6 +256,7 @@ public class WeatherInfo {
         builder.append(windDirection).append('|');
         builder.append(metric).append('|');
         builder.append(timestamp).append('|');
+        builder.append(pinWheel).append('|');
         serializeForecasts(builder);
         return builder.toString();
     }
@@ -250,7 +279,7 @@ public class WeatherInfo {
         }
 
         String[] parts = input.split("\\|");
-        if (parts == null || parts.length != 11) {
+        if (parts == null || parts.length != 12) {
             return null;
         }
 
@@ -258,7 +287,8 @@ public class WeatherInfo {
         long timestamp;
         float temperature, humidity, wind;
         boolean metric;
-        String[] forecastParts = parts[10].split(";");
+        String pinWheel;
+        String[] forecastParts = parts[11].split(";");
         int forecastItems;
         ArrayList<DayForecast> forecasts = new ArrayList<DayForecast>();
 
@@ -271,6 +301,7 @@ public class WeatherInfo {
             windDirection = Integer.parseInt(parts[7]);
             metric = Boolean.parseBoolean(parts[8]);
             timestamp = Long.parseLong(parts[9]);
+            pinWheel = parts[10];
             forecastItems = forecastParts == null ? 0 : Integer.parseInt(forecastParts[0]);
         } catch (NumberFormatException e) {
             return null;
@@ -306,6 +337,6 @@ public class WeatherInfo {
                 /* id */ parts[0], /* city */ parts[1], /* condition */ parts[2],
                 conditionCode, temperature,
                 humidity, wind, windDirection, metric,
-                /* forecasts */ forecasts, timestamp);
+                /* forecasts */ forecasts, timestamp, pinWheel);
     }
 }

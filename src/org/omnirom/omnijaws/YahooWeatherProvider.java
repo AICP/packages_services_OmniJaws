@@ -67,6 +67,7 @@ public class YahooWeatherProvider extends AbstractWeatherProvider  {
     };
 
     private static boolean metric;
+    private static String pinWheel;
     private static String todayShort;
     private static boolean addForecastDay;
     private static final boolean USE_GEOCODER = false;
@@ -148,7 +149,7 @@ public class YahooWeatherProvider extends AbstractWeatherProvider  {
                         handler.condition, handler.conditionCode, handler.temperature,
                         handler.humidity, handler.windSpeed,
                         handler.windDirection, metric, handler.forecasts,
-                        System.currentTimeMillis());
+                        System.currentTimeMillis(),pinWheel);
                 log(TAG, "Weather updated: " + w);
                 return w;
             } else {
