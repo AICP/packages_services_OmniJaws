@@ -18,13 +18,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="enable"
         android:title="@string/enable_title" />
 
     <ListPreference
         android:entries="@array/update_interval_entries"
         android:entryValues="@array/update_interval_values"
+        android:defaultValue="1"
         android:key="update_interval"
         android:title="@string/update_interval_title" />
 
@@ -42,6 +43,7 @@
     <ListPreference
         android:entries="@array/units_entries"
         android:entryValues="@array/units_values"
+        android:defaultValue="1"
         android:key="units"
         android:title="@string/units_title" />
 
