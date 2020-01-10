@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca8198a4_28c7de5b",
+        "filename": "src/org/omnirom/omnijaws/AbstractWeatherProvider.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6
+      },
+      "writtenOn": "2020-01-10T07:34:19Z",
+      "side": 1,
+      "message": "No need for this if it\u0027s already merged at the source",
+      "revId": "3b81d58e12bd48bde4fd1d8fe8377cb6ab4741f0",
+      "serverId": "9f904cbb-a964-4fab-a7dc-5cfc4d5c238b",
+      "unresolved": true
+    }
+  ]
+}
