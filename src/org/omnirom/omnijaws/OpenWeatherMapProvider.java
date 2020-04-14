@@ -16,6 +16,7 @@
 
 package org.omnirom.omnijaws;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import org.omnirom.omnijaws.WeatherInfo.DayForecast;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -46,10 +49,8 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
 
     private static final String URL_LOCATION =
             "http://api.openweathermap.org/data/2.5/find?q=%s&mode=json&lang=%s&appid=%s";
-    private static final String URL_WEATHER =
-            "http://api.openweathermap.org/data/2.5/weather?%s&mode=json&units=%s&lang=%s&appid=%s";
-    private static final String URL_FORECAST =
-            "http://api.openweathermap.org/data/2.5/forecast/daily?%s&mode=json&units=%s&lang=%s&cnt=" + FORECAST_DAYS + "&appid=%s";
+    private static final String URL_ONECALL =
+            "http://api.openweathermap.org/data/2.5/onecall?%s&mode=json&units=%s&lang=%s&appid=%s";
 
     private List<String> mKeys = new ArrayList<String>();
     private boolean mHasAPIKey;
@@ -99,6 +100,21 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
         return null;
     }
 
+    private String getNameLocality(String coordinate) {
+        double latitude = Double.valueOf(coordinate.substring(4, coordinate.indexOf("&")));
+        double longitude = Double.valueOf(coordinate.substring(coordinate.indexOf("lon=") + 4));
+        Geocoder geocoder = new Geocoder(mContext.getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if(listAddresses != null && listAddresses.size() > 0){
+                return listAddresses.get(0).getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public WeatherInfo getCustomWeather(String id, boolean metric) {
         String selection = String.format(Locale.US, SELECTION_ID, id);
         return handleWeatherRequest(selection, metric);
@@ -117,44 +133,41 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
         mRequestNumber++;
         String units = metric ? "metric" : "imperial";
         String locale = getLanguageCode();
-        String conditionUrl = String.format(Locale.US, URL_WEATHER, selection, units, locale, getAPIKey());
+        String conditionUrl = String.format(Locale.US, URL_ONECALL, selection, units, locale, getAPIKey());
         String conditionResponse = retrieve(conditionUrl);
         if (conditionResponse == null) {
             return null;
         }
         log(TAG, "Condition URL = " + conditionUrl + " returning a response of " + conditionResponse);
 
-        mRequestNumber++;
-        String forecastUrl = String.format(Locale.US, URL_FORECAST, selection, units, locale, getAPIKey());
-        String forecastResponse = retrieve(forecastUrl);
-        if (forecastResponse == null) {
-            return null;
-        }
-        log(TAG, "Forcast URL = " + forecastUrl + " returning a response of " + forecastResponse);
-
         try {
             JSONObject conditions = new JSONObject(conditionResponse);
-            JSONObject weather = conditions.getJSONArray("weather").getJSONObject(0);
-            JSONObject conditionData = conditions.getJSONObject("main");
-            JSONObject windData = conditions.getJSONObject("wind");
-            mSunrise = conditions.getJSONObject("sys").getInt("sunrise");
-            mSunset = conditions.getJSONObject("sys").getInt("sunset");
+            JSONObject conditionData = conditions.getJSONObject("current");
+            JSONObject weather = conditionData.getJSONArray("weather").getJSONObject(0);
+            mSunrise = conditionData.getInt("sunrise");
+            mSunset = conditionData.getInt("sunset");
             ArrayList<DayForecast> forecasts =
-                    parseForecasts(new JSONObject(forecastResponse).getJSONArray("list"), metric);
-            String localizedCityName = conditions.getString("name");
-            float windSpeed = (float) windData.getDouble("speed");
+                    parseForecasts(conditions.getJSONArray("daily"), metric);
+            String localizedCityName = getNameLocality(selection);
+            if (TextUtils.isEmpty(localizedCityName)) {
+                localizedCityName = selection; //mContext.getResources().getString(R.string.omnijaws_city_unkown);
+            }
+            float windSpeed = (float) conditionData.getDouble("wind_speed");
+            int windDeg = (int) conditionData.getInt("wind_deg");
             if (metric) {
                 // speeds are in m/s so convert to our common metric unit km/h
                 windSpeed *= 3.6f;
             }
-            WeatherInfo w = new WeatherInfo(mContext, conditions.getString("id"), localizedCityName,
+            WeatherInfo w = new WeatherInfo(mContext,
+                    /* id */ selection,
+                    /* city */ localizedCityName,
                     /* condition */ weather.getString("main"),
                     /* conditionCode */ mapConditionIconToCode(
                             weather.getString("icon"), weather.getInt("id")),
                     /* temperature */ sanitizeTemperature(conditionData.getDouble("temp"), metric),
                     /* humidity */ (float) conditionData.getDouble("humidity"),
                     /* wind */ windSpeed,
-                    /* windDir */ windData.has("deg") ? windData.getInt("deg") : 0,
+                    /* windDir */ windDeg,
                     metric,
                     forecasts,
                     System.currentTimeMillis());
