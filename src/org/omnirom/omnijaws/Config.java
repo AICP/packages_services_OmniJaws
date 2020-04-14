@@ -36,6 +36,7 @@ public class Config {
     public static final String PREF_KEY_ICON_PACK = "icon_pack";
     public static final String PREF_KEY_LAST_ALARM = "last_alarm";
     public static final String PREF_KEY_UPDATE_ERROR = "update_error";
+    public static final String PREF_KEY_COORD_ENABLE = "coordinates_enable";
 
     public static AbstractWeatherProvider getProvider(Context context) {
         SharedPreferences prefs = PreferenceManager
@@ -165,6 +166,20 @@ public class Config {
                 .getDefaultSharedPreferences(context);
 
         return prefs.edit().putBoolean(PREF_KEY_ENABLE, value).commit();
+    }
+
+    public static boolean isCoordinatesLabelEnabled(Context context) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        return prefs.getBoolean(PREF_KEY_COORD_ENABLE, false);
+    }
+
+    public static boolean setCoordinatesLabelEnabled(Context context, boolean value) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        return prefs.edit().putBoolean(PREF_KEY_COORD_ENABLE, value).commit();
     }
 
     public static int getUpdateInterval(Context context) {

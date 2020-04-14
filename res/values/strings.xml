@@ -63,5 +63,7 @@
     <string name="omnijaws_service_error_marker" translatable="false">*</string>
     <string name="with_forecast_title">With 4-day forecast and details</string>
     <string name="omnijaws_city_unkown">Unknown</string>
+    <string name="omnijaws_city_label_title">Show coordinates</string>
+    <string name="omnijaws_city_label_summary">Show coordinates as location when city is unknown</string>
 
 </resources>

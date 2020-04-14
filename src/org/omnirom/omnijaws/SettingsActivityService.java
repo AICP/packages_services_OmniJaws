@@ -58,6 +58,7 @@ public class SettingsActivityService extends PreferenceActivity implements OnPre
     private CheckBoxPreference mCustomLocation;
     private ListPreference mUnits;
     private SwitchPreference mEnable;
+    private SwitchPreference mCoordinatesLabelEnable;
     private boolean mTriggerUpdate;
     private boolean mTriggerPermissionCheck;
     private ListPreference mUpdateInterval;
@@ -149,6 +150,10 @@ public class SettingsActivityService extends PreferenceActivity implements OnPre
         }
         mUpdateStatus = findPreference(PREF_KEY_UPDATE_STATUS);
         queryLastUpdateTime();
+
+        mCoordinatesLabelEnable = (SwitchPreference) findPreference(Config.PREF_KEY_COORD_ENABLE);
+        mCoordinatesLabelEnable.setChecked(Config.isCoordinatesLabelEnabled(this));
+        mCoordinatesLabelEnable.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -222,6 +227,10 @@ public class SettingsActivityService extends PreferenceActivity implements OnPre
             Config.setIconPack(this, value);
             int valueIndex = mWeatherIconPack.findIndexOfValue(value);
             mWeatherIconPack.setSummary(mWeatherIconPack.getEntries()[valueIndex]);
+            return true;
+        } else if (preference == mCoordinatesLabelEnable) {
+            boolean value = (Boolean) newValue;
+            Config.setCoordinatesLabelEnabled(this, value);
             return true;
         } else if (preference == mEnable) {
             boolean value = (Boolean) newValue;

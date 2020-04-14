@@ -119,7 +119,8 @@ public class METNorwayProvider extends AbstractWeatherProvider {
 
             String city = getNameLocality(coordinates);
             if (TextUtils.isEmpty(city)) {
-                city = mContext.getResources().getString(R.string.omnijaws_city_unkown);
+                city = Config.isCoordinatesLabelEnabled(mContext) ? coordinates :
+                            mContext.getResources().getString(R.string.omnijaws_city_unkown);
             }
 
             WeatherInfo w = new WeatherInfo(mContext,

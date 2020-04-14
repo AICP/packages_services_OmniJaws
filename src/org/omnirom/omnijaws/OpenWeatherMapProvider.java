@@ -150,7 +150,8 @@ public class OpenWeatherMapProvider extends AbstractWeatherProvider {
                     parseForecasts(conditions.getJSONArray("daily"), metric);
             String localizedCityName = getNameLocality(selection);
             if (TextUtils.isEmpty(localizedCityName)) {
-                localizedCityName = selection; //mContext.getResources().getString(R.string.omnijaws_city_unkown);
+                localizedCityName = Config.isCoordinatesLabelEnabled(mContext) ? selection :
+                            mContext.getResources().getString(R.string.omnijaws_city_unkown);
             }
             float windSpeed = (float) conditionData.getDouble("wind_speed");
             int windDeg = (int) conditionData.getInt("wind_deg");
