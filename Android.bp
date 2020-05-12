@@ -26,4 +26,14 @@ android_app {
   optimize: {
     enabled: false,
   },
+  required: [
+      "privapp_whitelist_org.omnirom.omnijaws-ext",
+  ],
+}
+
+prebuilt_etc {
+    name: "privapp_whitelist_org.omnirom.omnijaws-ext",
+    sub_dir: "permissions",
+    src: "privapp_whitelist_org.omnirom.omnijaws-ext.xml",
+    filename_from_src: true,
 }
