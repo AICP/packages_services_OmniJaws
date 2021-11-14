@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="custom_owm_api_key_title">Mã số API</string>
+    <string name="custom_owm_api_key_summary">Nhập mã API của riêng bạn từ OpenWeatherMap để đảm bảo ở dưới giới hạn yêu cầu</string>
+</resources>
