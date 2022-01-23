@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="custom_owm_api_key_title">cheie API</string>
+    <string name="custom_owm_api_key_summary">Introduceți propria cheie API din OpenWeatherMap pentru a vă asigura că rămâneți sub limita de solicitare</string>
+</resources>

@@ -54,4 +54,6 @@
     <string name="omnijaws_current_text">Acum</string>
     <string name="show_background_title">Umbră fundal</string>
     <string name="weather_config_title">Setări serviciu</string>
+    <string name="with_forecast_title">Prognoza detaliată pe 4 zile</string>
+    <string name="omnijaws_city_unkown">Necunoscut</string>
 </resources>

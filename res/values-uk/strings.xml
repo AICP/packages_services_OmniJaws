@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="provider_title">Провайдер погоди</string>
+    <string name="provider_title">Постачальник погоди</string>
     <string name="units_title">Одиниця виміру</string>
     <string name="weather_progress_title">Перевірка розташування</string>
     <string name="weather_select_location">Виберіть розташування</string>
@@ -54,5 +54,6 @@
     <string name="omnijaws_current_text">Зараз</string>
     <string name="show_background_title">Фонова тінь</string>
     <string name="weather_config_title">Параметри служби</string>
+    <string name="with_forecast_title">З 4-денним прогнозом та деталями</string>
     <string name="omnijaws_city_unkown">Невідомо</string>
 </resources>
