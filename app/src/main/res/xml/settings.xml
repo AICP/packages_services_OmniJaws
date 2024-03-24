@@ -17,7 +17,7 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="enable"
         android:title="@string/enable_title"
@@ -54,7 +54,7 @@
         android:key="units"
         android:title="@string/units_title" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:key="custom_location"
         android:title="@string/custom_location_title" />

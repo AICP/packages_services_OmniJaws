@@ -49,7 +49,7 @@ import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import static org.omnirom.omnijaws.AbstractWeatherProvider.PART_COORDINATES;
 import static org.omnirom.omnijaws.LocationBrowseActivity.DATA_LOCATION_LAT;
@@ -64,9 +64,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
 
     private SharedPreferences mPrefs;
     private ListPreference mProvider;
-    private SwitchPreference mCustomLocation;
+    private SwitchPreferenceCompat mCustomLocation;
     private ListPreference mUnits;
-    private SwitchPreference mEnable;
+    private SwitchPreferenceCompat mEnable;
     private boolean mTriggerPermissionCheck;
     private ListPreference mUpdateInterval;
     private ListPreference mWeatherIconPack;
@@ -122,11 +122,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnPref
         addPreferencesFromResource(R.xml.settings);
 
         final PreferenceScreen prefScreen = getPreferenceScreen();
-        mEnable = (SwitchPreference) findPreference(Config.PREF_KEY_ENABLE);
+        mEnable = (SwitchPreferenceCompat) findPreference(Config.PREF_KEY_ENABLE);
         mEnable.setChecked(Config.isEnabled(getContext()));
         mEnable.setOnPreferenceChangeListener(this);
 
-        mCustomLocation = (SwitchPreference) findPreference(Config.PREF_KEY_CUSTOM_LOCATION);
+        mCustomLocation = (SwitchPreferenceCompat) findPreference(Config.PREF_KEY_CUSTOM_LOCATION);
 
         mProvider = (ListPreference) findPreference(Config.PREF_KEY_PROVIDER);
         mProvider.setOnPreferenceChangeListener(this);
