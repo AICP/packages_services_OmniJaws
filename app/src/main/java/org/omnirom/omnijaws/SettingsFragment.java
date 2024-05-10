@@ -147,7 +147,7 @@ public class SettingsFragment extends SettingsBasePreferenceFragment implements 
 
         mProvider = (ListPreference) findPreference(Config.PREF_KEY_PROVIDER);
         mProvider.setOnPreferenceChangeListener(this);
-        int idx = mProvider.findIndexOfValue(mPrefs.getString(Config.PREF_KEY_PROVIDER, "1"));
+        int idx = mProvider.findIndexOfValue(mPrefs.getString(Config.PREF_KEY_PROVIDER, "2"));
         if (idx == -1) {
             idx = 0;
         }
