@@ -4,10 +4,6 @@ android_app {
   sdk_version: "system_current",
   system_ext_specific: true,
 
-  libs: [
-    "org.apache.http.legacy",
-  ],
-
   srcs: [
     "app/src/main/**/*.java",
   ],
@@ -27,6 +23,12 @@ android_app {
   },
   required: [
       "privapp_whitelist_org.omnirom.omnijaws-ext",
+  ],
+
+  optional_uses_libs: [
+    "org.apache.http.legacy",
+    "androidx.window.extensions",
+    "androidx.window.sidecar"
   ],
 }
 
