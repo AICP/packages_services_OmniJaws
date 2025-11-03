@@ -26,12 +26,8 @@ public class METNorwayProvider extends AbstractWeatherProvider {
     private static final String URL_WEATHER =
             "https://api.met.no/weatherapi/locationforecast/2.0/?";
 
-    private static final SimpleDateFormat gmt0Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-    private static final SimpleDateFormat userTimeZoneFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-
     public METNorwayProvider(Context context) {
         super(context);
-        initTimeZoneFormat();
     }
 
     public WeatherInfo getLocationWeather(Location location, boolean metric) {
@@ -329,16 +325,20 @@ public class METNorwayProvider extends AbstractWeatherProvider {
 		return WEATHER_CONDITION_MAPPING.getOrDefault(condition, condition);
 	}
 
-    private void initTimeZoneFormat() {
-        gmt0Format.setTimeZone(TimeZone.getTimeZone("GMT"));
-        userTimeZoneFormat.setTimeZone(TimeZone.getDefault());
-    }
+    private String convertTimeZone(String utcDateString) {
+        SimpleDateFormat inputParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+        inputParser.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    private String convertTimeZone(String tmp) {
         try {
-            return userTimeZoneFormat.format(gmt0Format.parse(tmp));
+            java.util.Date date = inputParser.parse(utcDateString);
+
+            SimpleDateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+            outputFormatter.setTimeZone(TimeZone.getDefault()); // Use the device's local timezone
+
+            return outputFormatter.format(date);
         } catch (ParseException e) {
-            return tmp;
+            Log.e(TAG, "Failed to parse date string: '" + utcDateString + "'", e);
+            return utcDateString;
         }
     }
 
