@@ -30,7 +30,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.android.internal.util.crdroid.OmniJawsClient;
+import com.android.internal.util.aicp.OmniJawsClient;
 import com.android.settingslib.widget.MainSwitchPreference;
 import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
